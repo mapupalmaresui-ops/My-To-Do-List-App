@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/png" href="icon-192.png.png">
+    <link rel="manifest" href="manifest.jason">
+    <title>ToDo List</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdeliver.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdeliver.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --glass-bg: rgba(255, 255, 255, 0.95);
+        }
+
+        body {
+            background: var(--primary-gradient);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+        }
+
+        .todo-card {
+            background: var(--glass-bg);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .input-group {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 5px;
+            border: 1px solid #dee2e6;
+        }
+
+        .form-control {
+            border: none;
+            background: transparent;
+            box-shadow: none !important;
+        }
+
+        .btn-add {
+            background: #764ba2;
+            color: white;
+            border-radius: 10px !important;
+            padding: 8px 20px;
+            transition: all 0.3s;
+        }
+
+        .btn-add:hover {
+            background: #5a3782;
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .list-group-item {
+            border: none;
+            margin-bottom: 10px;
+            border-radius: 12px !important;
+            background: #fdfdfd;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .list-group-item:hover {
+            transform: scale(1.02);
+        }
+
+        .task-text {
+            cursor: pointer;
+            flex-grow: 1;
+            font-weight: 500;
+            color: #444;
+        }
+
+        .done {
+            text-decoration: line-through;
+            color: #adb5bd;
+        }
+
+        .btn-delete {
+            opacity: 0.5;
+            transition: opacity 0.2s;
+            color: #dc3545;
+            background: none;
+            border: none;
+            font-size: 0.9rem;
+        }
+
+        .list-group-item:hover .btn-delete {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="todo-card">
+        <h2 class="text-center fw-bold mb-4" style="color: #4b306b;">To Do List</h2>
+
+        <div class="input-group mb-4">
+            <input type="text" id="taskInput" class="form-control" placeholder="What needs to be done?">
+            <button class="btn btn-add" onclick="addTask()">Add</button>
+        </div>
+
+        <ul id="taskList" class="list-group">
+            </ul>
+    </div>
+
+    <script>
+      const taskList = document.getElementById("taskList");
+
+      function addTask() {
+        const input = document.getElementById("taskInput");
+        const task = input.value.trim();
+
+        if (task) {
+          const li = document.createElement("li");
+
+          li.className =
+            "list-group-item d-flex justify-content-between align-items-center mb-2 rounded shadow-sm border";
+
+          li.innerHTML = `
+                    <span>${task}</span>
+                    <button class="btn btn-outline-danger btn-sm" onclick="this.parentElement.remove()">Remove</button>
+                `;
+
+          taskList.appendChild(li);
+          input.value = "";
+        }
+      }
+
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker
+          .register("/service-worker.js")
+          .then(() => {
+            console.log("ayos! rehistro as service worker");
+          })
+          .catch((error) => {
+            console.log("Registration failed: ", error);
+          });
+      }
+    </script>
+  </body>
+</html>
+
